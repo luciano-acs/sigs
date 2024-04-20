@@ -1,20 +1,15 @@
-import React, { useState } from "react";
-import Nav from "./Nav";
-import { Link, Outlet } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { RiBillLine } from "react-icons/ri";
 import { FiPieChart, FiMonitor, FiSearch } from "react-icons/fi";
 import { GrUserPolice } from "react-icons/gr"
-import { IoIosArrowForward } from "react-icons/io";
+import SubMenu from "./SubMenu";
+import { MenuContext } from "../context/MenuContext";
+import Swal from 'sweetalert2';
 
 const Menu = () => {
 
-    const [subMenuPersonal, setSubMenuPersonal] = useState(false);
-    const [activeLink, setActiveLink] = useState('');
-
-    const handleClick = (link) => {   
-        link === 'personal' ? setSubMenuPersonal(!subMenuPersonal) : setSubMenuPersonal(false);
-        setActiveLink(link === activeLink ? '' : link); 
-    }
+    const { showSubMenu, loginOK, handleShowOffSubMenu, handleClickSubmenu } = useContext(MenuContext);
 
     return (
         <div className="bg-[#D9D9D9] fixed left-0 top-20 w-52 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
@@ -25,65 +20,66 @@ const Menu = () => {
                         <FiSearch className="text-3xl mx-2 text-[#1474E4]" />
                     </button>
                 </li>
-                <li className={`${activeLink === 'dashboard' ? 'bg-white my-2 py-2 pl-2' : ''} hover:bg-white my-2 py-2 pl-2 rounded-tl-lg rounded-bl-lg group transition-colors`}>
-                    <Link to="/dashboard" >
-                        <a onClick={() => handleClick('dashboard')} className={` ${activeLink === 'dashboard' ? 'bg-white text-[#1474E4]' : ''} flex flex-row justify-between items-center rounded-lg py-2 px-2`}>
+                <li className={'py-2 pl-2'} >
+                    {loginOK ?
+                        (<NavLink to={"/dashboard"} className={({ isActive }) =>
+                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                             <FiPieChart className="group-hover:text-[#1474E4] text-3xl" />
-                            <span className={`${activeLink === 'dashboard' ? 'font-bold' : ''}group-hover:text-[#1474E4]`}>Dashboard</span>
-                        </a>
-                    </Link>
+                            <span className={'group-hover:text-[#1474E4]'}>Dashboard</span>
+                        </NavLink>)
+                        :
+                        (<NavLink className={`flex flex-row justify-between items-center rounded-l-lg px-2 py-2 group opacity-50 pointer-events-none`}>
+                            <FiPieChart className="text-3xl" />
+                            <span>Dashboard</span>
+                        </NavLink>)
+                    }
                 </li>
-                <li className={`${activeLink === 'seguimiento' ? 'bg-white my-2 py-2 pl-2' : ''} hover:bg-white my-2 py-2 pl-2 rounded-tl-lg rounded-bl-lg group transition-colors`}>
-                    <Link to="/seguimiento">
-                        <a onClick={() => handleClick('seguimiento')} className={` ${activeLink === 'seguimiento' ? 'bg-white text-[#1474E4]' : ''} flex flex-row justify-between items-center rounded-lg py-2 px-2`}>
+                <li className={`py-2 pl-2`}>
+                    {loginOK ?
+                        <NavLink to="/seguimiento" className={({ isActive }) =>
+                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                             <FiMonitor className="group-hover:text-[#1474E4] text-3xl" />
-                            <span className={`${activeLink === 'seguimiento' ? 'font-bold' : ''}group-hover:text-[#1474E4]`}>Seguimiento</span>
-                        </a>
-                    </Link>
+                            <span className={`group-hover:text-[#1474E4]`}>Seguimiento</span>
+                        </NavLink>
+                        :
+                        <NavLink className={`flex flex-row justify-between items-center rounded-l-lg px-2 py-2 group opacity-50 pointer-events-none`}>
+                            <FiMonitor className="text-3xl" />
+                            <span>Seguimiento</span>
+                        </NavLink>
+                    }
                 </li>
-                <li className={`${activeLink === 'personal' ? 'bg-white mt-2 py-2 pl-2' : 'rounded-bl-lg'} hover:bg-white mt-2 py-2 pl-2 rounded-tl-lg group transition-colors`}>
-                    <Link to="/personal" >
-                        <a onClick={() => handleClick('personal')} className={`${activeLink === 'personal' ? 'bg-white text-[#1474E4]' : ''} flex flex-row justify-between items-center rounded-lg py-2 px-2`}>
+                <li className={`pt-2 pl-2`}>
+                    {loginOK ?
+                        <NavLink to="/personal" className={({ isActive }) =>
+                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleClickSubmenu}>
                             <GrUserPolice className="group-hover:text-[#1474E4] text-3xl" />
-                            <span className={`${activeLink === 'personal' ? 'font-bold' : ''}group-hover:text-[#1474E4]`}>Personal</span>
-                        </a>
-                    </Link>
+                            <span className={`group-hover:text-[#1474E4]`}>Personal</span>
+                        </NavLink>
+                        :
+                        <NavLink className={`flex flex-row justify-between items-center rounded-l-lg px-2 py-2 group opacity-50 pointer-events-none`}>
+                            <GrUserPolice className="text-3xl" />
+                            <span>Personal</span>
+                        </NavLink>
+                    }
                 </li>
-                {subMenuPersonal && (
-                    <li className="bg-[#1474E4]/50 mb-2 py-2 pl-2 rounded-bl-lg transition-all">
-                        <ul className="transition-all">
-                            <li>
-                                <a href="#" className="group flex flex-row items-center mb-1">
-                                    <IoIosArrowForward className="group-hover:text-2xl transition-all" />
-                                    <span className="group-hover:font-bold transition-all">Listado</span>
-                                </a>
-                            </li>
-                            <li className="flex flex-row items-center mb-1">
-                                <a href="#" className="flex flex-row items-center mb-1 group">
-                                    <IoIosArrowForward className="group-hover:text-2xl transition-all" />
-                                    <span className="group-hover:font-bold transition-all">Altas</span>
-                                </a>
-                            </li>
-                            <li className="flex flex-row items-center mb-1">
-                                <a href="#" className="flex flex-row items-center mb-1 group">
-                                    <IoIosArrowForward className="group-hover:text-2xl transition-all" />
-                                    <span className="group-hover:font-bold transition-all">Modificaciones y Bajas</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>)}
-                <li className={`${activeLink === 'informes' ? 'bg-white my-2 py-2 pl-2' : ''} hover:bg-white my-2 py-2 pl-2 rounded-tl-lg rounded-bl-lg group transition-colors`}>
-                    <Link to="/informe" >
-                        <a onClick={() => handleClick('informes')} className={` ${activeLink === 'informes' ? 'bg-white text-[#1474E4]' : ''} flex flex-row justify-between items-center rounded-lg py-2 px-2`}>
-                            <RiBillLine className="group-hover:text-[#1474E4] text-3xl" />
-                            <span className={`${activeLink === 'informes' ? 'font-bold' : ''}group-hover:text-[#1474E4]`}>Informes</span>
-                        </a>
-                    </Link>
+                {showSubMenu && <SubMenu className="transition-all" />}
+                <li className={`pt-4 pl-2`}>
+                    {loginOK ?
+                        <NavLink to="/informe" className={({ isActive }) =>
+                        `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
+                        <RiBillLine className="group-hover:text-[#1474E4] text-3xl" />
+                        <span className={`group-hover:text-[#1474E4]`}>Informes</span>
+                    </NavLink>
+                    :
+                    <NavLink className={`flex flex-row justify-between items-center rounded-l-lg px-2 py-2 group opacity-50 pointer-events-none`}>
+                        <RiBillLine className="text-3xl" />
+                        <span>Informes</span>
+                    </NavLink>
+                    }
                 </li>
             </ul>
             <Outlet />
-            {<Nav setActiveLink={handleClick}/>}
-        </div>
+        </div >
     );
 };
 

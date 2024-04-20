@@ -7,8 +7,24 @@ export default {
   theme: {
     extend: {
       width:{
-        'calc': 'calc(100% - 208px)'
+        'calc': 'calc(100% - 208px)',
+        'calc1': 'calc(100% - 10px)',
+      },
+      height:{
+        'calc': 'calc(100% - 136px)',
+        '10%': '10%',
+        '90%': '90%'
+      },
+      maxHeight:{
+        'calc': 'calc(100% - 136px)'
+      },
+      minWidth:{
+        '150px': '150px',
+      },
+      maxWidth:{
+        '150px': '150px',
       }
+
     },
   },
   plugins: [
