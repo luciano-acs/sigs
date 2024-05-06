@@ -1,17 +1,55 @@
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsivePie } from '@nivo/pie';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const Dashboard = () => {
 
     const [distritos, setDistritos] = useState([])
     const [dataEventos, setDataEventos] = useState([])
     const [dataTarea, setDataTarea] = useState([])
+    const [listadoEventos, setListadoEventos] = useState([])
     const [evento, setEvento] = useState('V10')
     const [listadoDistritos, setListadoDistritos] = useState([])
 
     const [distritosSeleccionados, setDistritosSeleccionados] = useState(new Set());
     const [eventosSeleccionados, setEventosSeleccionados] = useState(new Set());
+    const [loading, setLoading] = useState(false);
+
+    const handleExportPDF = () => {
+        setLoading(true);
+
+        const input = document.getElementById('componente-a-exportar');
+
+        html2canvas(input, {
+            scale: 2
+        })
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'l',
+                    unit: 'mm',
+                    format: [410, 200]
+                });
+                pdf.addImage(imgData, 'PNG', 10, 10, 400, 190);
+                const date = new Date();
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                const hour = date.getHours().toString().padStart(2, '0');
+                const minute = date.getMinutes().toString().padStart(2, '0');
+                const second = date.getSeconds().toString().padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+                pdf.text(`REPORTE DE EVENTOS - ${formattedDate}`, 140, 10, { align: 'right'});
+                pdf.save('componente.pdf');
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error al exportar a PDF:', error);
+            });
+    };
 
     const handleGraficas = (eventos) => {
         const newDataEventos = []
@@ -91,6 +129,10 @@ const Dashboard = () => {
     }, [distritosSeleccionados])
 
     useEffect(() => {
+        eventosSeleccionados.size === 0 ? setListadoEventos([]) : setListadoEventos([...eventosSeleccionados])
+    }, [eventosSeleccionados])
+
+    useEffect(() => {
         const fetchData = () => {
             Promise.all([
                 fetch(`http://localhost:8080/personal/distritos?nombreDistritos=`, {
@@ -103,7 +145,7 @@ const Dashboard = () => {
                     .then(data => {
                         return data;
                     }),
-                fetch(`http://localhost:8080/personal/eventos?nombreDistritos=${listadoDistritos}`, {
+                fetch(`http://localhost:8080/personal/eventos?nombreDistritos=${listadoDistritos}&nombreEventos=${listadoEventos}`, {
                     method: 'GET',
                     headers: {
                         'authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -113,7 +155,7 @@ const Dashboard = () => {
                     .then(data => {
                         return data;
                     }),
-                fetch(`http://localhost:8080/personal/eventos?evento=${evento}`, {
+                fetch(`http://localhost:8080/personal/eventos?nombreEventos=${evento}&nombreDistritos=${listadoDistritos}`, {
                     method: 'GET',
                     headers: {
                         'authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -150,34 +192,47 @@ const Dashboard = () => {
 
         return () => clearInterval(interval)
 
-    }, [evento, listadoDistritos])
+    }, [evento, listadoDistritos, listadoEventos])
 
     return (
-        <div className="fixed top-20 left-52 w-calc h-calc">
-            <div className="w-full h-full flex flex-row flex-wrap justify-center items-center pt-2">
-                <div className="w-2/3 h-2/3 flex justify-center items-center pl-8 pr-3 py-2">
+        <div className="fixed top-20 left-52 w-calc h-calc" >
+            <div className="w-full h-full flex flex-row flex-wrap justify-center items-center pt-2" id="componente-a-exportar">
+                <div className="w-2/3 h-2/3 flex justify-center items-center pl-8 pr-3 py-2" >
                     <div className='w-full h-full bg-[#0A3E79] shadow-lg shadow-black rounded-md'>
                         <div className='w-full h-fit bg-[#0A3E79] rounded-md'>
                             <div className='w-full h-full bg-[#D9D9D9] p-2 rounded-md'>
                                 <form className='flex justify-start items-center flex-row pl-4'>
                                     <div className='pl-4 flex justify-start items-center gap-4 pr-4'>
-                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("ARRIBO")}></input>
-                                        <label htmlFor="">ARRIBO</label>
-                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("ARRIBOINVALIDO")}></input>
-                                        <label htmlFor="">ARRIBO INVALIDO</label>
-                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("LOGIN")}></input>
-                                        <label htmlFor="">LOGIN</label>
-                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("NOVEDAD")}></input>
-                                        <label htmlFor="">NOVEDAD</label>
+                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("V04")}></input>
+                                        <label htmlFor="" className='text-sm text-center'>ARRIBO</label>
+                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("_PI")}></input>
+                                        <label htmlFor="" className='text-sm text-center'>ARRIBO INVALIDO</label>
+                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("V10")}></input>
+                                        <label htmlFor="" className='text-sm text-center'>LOGIN</label>
+                                        <input type='checkbox' className='bg-white w-8 h-6' onClick={() => handleClickEvento("V03")}></input>
+                                        <label htmlFor="" className='text-sm text-center'>NOVEDAD</label>
                                     </div>
-                                    <div className='flex items-center ml-auto pr-4'>
-                                        <button className='bg-[#1474EA] text-white rounded-lg py-1 px-2 border-[#1474E4]/50 border-2 focus:outline-[#1474E4] h-8 w-24 uppercase font-semibold'>Filtrar</button>
+                                    <div className='flex items-center justify-center ml-auto pr-4'>
+                                        <button
+                                            className='bg-[#1474EA] text-white rounded-lg py-1 px-2 border-[#1474E4]/50 border-2 focus:outline-[#1474E4] h-8 w-44 uppercase font-semibold flex items-center justify-center'
+                                            onClick={handleExportPDF}
+                                            disabled={loading}
+                                        >
+                                            {loading ? 'Generando PDF...' : 'EXPORTAR A PDF'}
+                                        </button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                         {
-                            dataEventos.length === 0 ? <h1 className='text-2xl text-white uppercase flex justify-center items-center font-semibold h-90% transition-all'>No hay eventos para los distritos seleccionados</h1>
+                            dataEventos.length === 0 ? <motion.h1
+                                className={`text-2xl text-white uppercase flex justify-center items-center font-semibold h-90%`}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                No hay eventos para los distritos seleccionados
+                            </motion.h1>
                                 :
                                 <ResponsiveBar
                                     data={dataEventos}
@@ -294,65 +349,76 @@ const Dashboard = () => {
                 <div className="w-1/3 h-2/3 flex justify-center items-center pr-8 pl-3 py-2">
                     <div className='w-full h-full bg-[#0A3E79] shadow-lg shadow-black rounded-md'>
                         <select className="bg-white w-72 rounded-lg py-1 px-2 border-[#1474E4]/50 border-2 focus:outline-[#1474E4] h-8 mt-2 ml-4" type="number" name="distritoID" id="distrito" onChange={(e) => setEvento(e.target.value)}>
-                            <option hidden value="">Seleccione un evento</option>
+                            <option hidden value=""  className='p-0'>Seleccione un evento</option>
                             <option value="V10">LOGIN</option>
                             <option value="V04">ARRIBO</option>
                             <option value="_PI">ARRIBO INVALIDO</option>
                             <option value="V03">NOVEDAD</option>
                         </select>
-                        <ResponsivePie
-                            data={dataTarea}
-                            margin={{ top: 30, right: 95, bottom: 100, left: 80 }}
-                            sortByValue={true}
-                            innerRadius={0.6}
-                            colors={{ scheme: 'purple_blue' }}
-                            borderWidth={1}
-                            borderColor={{
-                                from: 'color',
-                                modifiers: [
-                                    [
-                                        'darker',
-                                        '0.3'
-                                    ]
-                                ]
-                            }}
-                            arcLinkLabelsSkipAngle={10}
-                            arcLinkLabelsTextOffset={4}
-                            arcLinkLabelsTextColor="#ffffff"
-                            arcLinkLabelsOffset={3}
-                            arcLinkLabelsDiagonalLength={10}
-                            arcLinkLabelsStraightLength={15}
-                            arcLinkLabelsThickness={2}
-                            arcLinkLabelsColor="white"
-                            arcLabelsSkipAngle={10}
-                            arcLabelsTextColor={{
-                                from: 'color',
-                                modifiers: [
-                                    [
-                                        'darker',
-                                        '2'
-                                    ]
-                                ]
-                            }}
-                            motionConfig="slow"
-                            transitionMode="centerRadius"
-                            legends={[
-                                {
-                                    anchor: 'bottom-right',
-                                    direction: 'column',
-                                    justify: false,
-                                    translateX: 100,
-                                    translateY: 40,
-                                    itemWidth: 100,
-                                    itemHeight: 20,
-                                    itemsSpacing: 0,
-                                    symbolSize: 15,
-                                    itemDirection: 'left-to-right',
-                                    itemTextColor: '#ffffff',
-                                    symbolSpacing: 10,
-                                }
-                            ]}
-                        />
+                        {
+                            dataTarea.length === 0 ? <motion.h1
+                                className={`text-2xl text-white text-center uppercase flex justify-center items-center font-semibold h-90%`}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}>
+                                No hay tareas para los distritos seleccionados
+                            </motion.h1>
+                                :
+                                <ResponsivePie
+                                    data={dataTarea}
+                                    margin={{ top: 30, right: 95, bottom: 100, left: 80 }}
+                                    sortByValue={true}
+                                    innerRadius={0.6}
+                                    colors={{ scheme: 'purple_blue' }}
+                                    borderWidth={1}
+                                    borderColor={{
+                                        from: 'color',
+                                        modifiers: [
+                                            [
+                                                'darker',
+                                                '0.3'
+                                            ]
+                                        ]
+                                    }}
+                                    arcLinkLabelsSkipAngle={10}
+                                    arcLinkLabelsTextOffset={4}
+                                    arcLinkLabelsTextColor="#ffffff"
+                                    arcLinkLabelsOffset={3}
+                                    arcLinkLabelsDiagonalLength={10}
+                                    arcLinkLabelsStraightLength={15}
+                                    arcLinkLabelsThickness={2}
+                                    arcLinkLabelsColor="white"
+                                    arcLabelsSkipAngle={10}
+                                    arcLabelsTextColor={{
+                                        from: 'color',
+                                        modifiers: [
+                                            [
+                                                'darker',
+                                                '2'
+                                            ]
+                                        ]
+                                    }}
+                                    motionConfig="slow"
+                                    transitionMode="centerRadius"
+                                    legends={[
+                                        {
+                                            anchor: 'bottom-right',
+                                            direction: 'column',
+                                            justify: false,
+                                            translateX: 100,
+                                            translateY: 40,
+                                            itemWidth: 100,
+                                            itemHeight: 20,
+                                            itemsSpacing: 0,
+                                            symbolSize: 15,
+                                            itemDirection: 'left-to-right',
+                                            itemTextColor: '#ffffff',
+                                            symbolSpacing: 10,
+                                        }
+                                    ]}
+                                />
+                        }
+
                     </div>
                 </div>
                 <div className='w-full h-1/3 flex justify-center items-center px-8 py-4'>
@@ -366,7 +432,7 @@ const Dashboard = () => {
                                     onClick={() => handleClickDistrito(distrito.distrito)}
                                 >
                                     <h1 className='text-center text-2xl font-bold px-2 uppercase'>{distrito.distrito}</h1>
-                                    <p className='text-xl font-semibold'>{distrito.cantidadPersonal}</p>
+                                    <div className='flex justify-center items-center text-xl font-semibold'>{distrito.cantidadPersonal}</div>
                                 </div>
                             );
                         })}

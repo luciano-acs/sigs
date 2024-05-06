@@ -26,10 +26,10 @@ const Personal = () => {
 
     const closeModalPersonal = (funcion) => {
         if (funcion === 'cerrar') {
-            setPersonalSeleccionado(null);
-        } else {
-            setPersonalSeleccionado(null);
             setActualizacion(!actualizacion);
+            setPersonalSeleccionado(null);
+        }else{
+            setPersonalSeleccionado(null);
         }
     };
 
@@ -178,12 +178,12 @@ const Personal = () => {
                             {
                                 loading ?
                                     <tr className="h-16">
-                                        <td><div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto" /></td>
-                                        <td><div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto" /></td>
-                                        <td><div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto" /></td>
-                                        <td><div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto" /></td>
-                                        <td><div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto" /></td>
-                                        <td><div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto" /></td>
+                                        <td className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto"/>
+                                        <td className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto"/>
+                                        <td className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto"/>
+                                        <td className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto"/>
+                                        <td className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto"/>
+                                        <td className="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-blue-600 m-auto"/>
                                     </tr>
                                     :
                                     listaPersonal.map((personal) => (
@@ -196,7 +196,6 @@ const Personal = () => {
                                             <td className="border border-collapse flex items-center justify-center gap-8 flex-row h-full">
                                                 <Tooltip className="bg-cyan-800 rounded-md px-2" title="Modificar">
                                                     <LuPencilLine className="text-4xl bg-cyan-800 text-white rounded-md py-2 cursor-pointer" onClick={() => openModalPersonal(personal.personalID)} />
-                                                    {personalSeleccionado !== null && (<ModificacionPersonal funcionModalPersonal={closeModalPersonal} personalId={personalSeleccionado} />)}
                                                 </Tooltip>
                                                 <Tooltip className="bg-red-800 rounded-md px-2" title="Eliminar">
                                                     <MdDeleteOutline className="text-4xl bg-red-800 text-white rounded-md py-2 cursor-pointer" onClick={() => eliminarPersonal(personal.personalID)} />
@@ -205,6 +204,7 @@ const Personal = () => {
                                         </tr>
                                     ))
                             }
+                            {personalSeleccionado !== null && (<ModificacionPersonal funcionModalPersonal={closeModalPersonal} personalId={personalSeleccionado} />)}       
                         </tbody>
                     </table>
                     <div className="flex justify-center flex-row items-center mt-4 gap-4 h-8">

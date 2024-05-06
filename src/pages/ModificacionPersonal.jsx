@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { MdClose } from "react-icons/md";
 import FormUsuario from '../components/FormUsuario';
 import Swal from 'sweetalert2';
@@ -11,7 +11,6 @@ const ModificacionPersonal = (props) => {
 
   const cambiarEstadoModal = (funcion) => {
     funcionModalPersonal(funcion);
-
   }
 
   const handleSubmit = () => {
@@ -26,6 +25,23 @@ const ModificacionPersonal = (props) => {
     })
       .then((response) => response.json())
       .then(data => {
+
+        if(formData.grado && formData.gradoID){
+          const gradoID = {
+            gradoID: formData.gradoID,
+            grado: formData.grado
+          }
+          formData.gradoID = {...gradoID}
+        }
+
+        if(formData.distrito && formData.distritoID){
+          const distritoID = {
+            distritoID: formData.distritoID,
+            distrito: formData.distrito
+          }
+          formData.distritoID = {...distritoID}
+        }
+
         const actualizacion = {
           ...data,
           ...formData
@@ -46,8 +62,9 @@ const ModificacionPersonal = (props) => {
           body: JSON.stringify(actualizacion)
         })
           .then((response) => {
-            if (response.ok) {
+            if (response.ok) {              
               Swal.fire("Personal actualizado", "", "success");
+              cambiarEstadoModal('cerrar')
             }
           })
           .catch((error) => console.log(error))
@@ -68,12 +85,12 @@ const ModificacionPersonal = (props) => {
     <>
       <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
         <div className="bg-[#D9D9D9] flex flex-col justify-center items-start rounded-xl p-4 w-2/4">
-          <MdClose className='flex ml-auto text-3xl cursor-pointer' onClick={() => cambiarEstadoModal('cerrar')} />
+          <MdClose className='flex ml-auto text-3xl cursor-pointer' onClick={() => cambiarEstadoModal('')} />
           <div className='flex pl-4'>
             <h1 className='font-bold text-4xl py-6 text-black uppercase'>Modificaciones</h1>
           </div>
           <div className='flex p-4 w-full'>
-            <FormUsuario personalId={personalId} handleFormChange={handleFormChange} />
+            <FormUsuario personalId={personalId} handleFormChange={handleFormChange} esModificacion={true}/>
           </div>
           <div className='flex justify-center w-52 text-white bg-black rounded-xl font-semibold text-lg ml-auto mr-4'>
             <button className='' onClick={handleSubmit}>Actualizar</button>

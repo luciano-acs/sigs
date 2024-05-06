@@ -12,7 +12,8 @@ const Principal = () => {
             }
         })
             .then(response => {
-                if (!response.ok) {
+                if (!response.ok || localStorage.getItem('token') === null){
+                    changeUser();
                     throw new Error("Servidor no disponible, intente más tarde");
                 }
                 return response.json();

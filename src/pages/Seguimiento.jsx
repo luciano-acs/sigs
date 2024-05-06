@@ -131,183 +131,175 @@ const Seguimiento = () => {
     }
 
     const handlecarga = () => {
-        if (formExcelDataEventos.length === 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error en la carga',
-                text: 'No hay datos para cargar'
-            });
-            return;
-        } else {
-            if (optionSelected === 'memo') {
-                var cantOkMemo = 0;
-                setCantOK(0);
-                const fetchPromises = formExcelDataMemo.map(fila => {
-                    return Promise.all([
-                        fetch(`http://localhost:8080/personal/listar/${fila.PERSONAL}`, {
-                            method: 'GET',
-                            headers: {
-                                'authorization': 'Bearer ' + localStorage.getItem('token')
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                return data;
-                            }),
-                        fetch(`http://localhost:8080/horarios/horario/${fila.HORARIO}`, {
-                            method: 'GET',
-                            headers: {
-                                'authorization': 'Bearer ' + localStorage.getItem('token')
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                return data;
-                            })
-                    ])
-                        .then(([personal, horario]) => {
-                            delete personal.enabled;
-                            delete personal.authorities;
-                            delete personal.accountNonExpired;
-                            delete personal.credentialsNonExpired;
-                            delete personal.accountNonLocked;
-
-                            const fecha = fila.FECHA.split('/');
-                            const year = fecha[2];
-                            const month = fecha[1] < 10 ? `0${fecha[1]}` : fecha[1];
-                            const day = fecha[0];
-                            const fechaFormateada = `${year}-${month}-${day}T00:00:00`;
-
-                            console.log(fechaFormateada)
-                            const nuevoServicio = {
-                                "servicioID": null,
-                                "nombre": fila.SERVICIO,
-                                "fecha": fechaFormateada,
-                                "personalID": personal,
-                                "horarioID": horario
-                            };
-
-                            console.log(nuevoServicio)
-                            return fetch('http://localhost:8080/servicio/serv', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                                body: JSON.stringify(nuevoServicio)
-                            });
-                        })
-                        .then(response => {
-                            if (response.status === 200) {
-                                cantOkMemo++;
-                            }
-                        })
-                        .catch(error => console.log(error));
-                });
-
-                Promise.all(fetchPromises)
-                    .then(() => {
-                        if (cantOkMemo === formExcelDataMemo.length) {
-                            Swal.fire('Carga exitosa');
-                        } else {
-                            Swal.fire('Error en la carga');
+        if (optionSelected === 'memo') {
+            var cantOkMemo = 0;
+            setCantOK(0);
+            const fetchPromises = formExcelDataMemo.map(fila => {
+                return Promise.all([
+                    fetch(`http://localhost:8080/personal/listar/${fila.PERSONAL}`, {
+                        method: 'GET',
+                        headers: {
+                            'authorization': 'Bearer ' + localStorage.getItem('token')
                         }
-                        setCantOK(cantOkMemo);
-                    });
-            } else {
-                var cantOkEventos = 0;
-                setCantOK(0);
-                const fetchPromises = formExcelDataEventos.map(fila => {
-                    let partes_fecha = fechaBusqueda.split('-');
-                    let year = partes_fecha[0];
-                    let month = partes_fecha[1];
-                    let day = partes_fecha[2];
-
-                    const servicioBusqueda = {
-                        "nombre": fila.PERSONAL,
-                        "fecha": `${day}-${month}-${year}`
-                    };
-                    return Promise.all([
-                        fetch(`http://localhost:8080/tareas/listar/${fila.EVENTO}`, {
-                            method: 'GET',
-                            headers: {
-                                'authorization': 'Bearer ' + localStorage.getItem('token')
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                return data;
-                            }),
-                        fetch(`http://localhost:8080/servicio/buscar`, {
-                            method: 'POST',
-                            headers: {
-                                'content-type': 'application/json',
-                                'authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            body: JSON.stringify(servicioBusqueda)
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                return data;
-                            })
-                    ]).then(([tarea, servicio]) => {
-
-                        delete servicio.personalID.enabled;
-                        delete servicio.personalID.authorities;
-                        delete servicio.personalID.accountNonExpired;
-                        delete servicio.personalID.credentialsNonExpired;
-                        delete servicio.personalID.accountNonLocked;
-
-                        let partes_fecha = fila.FECHA.split('/');
-                        let year = partes_fecha[2];
-                        let month = partes_fecha[1];
-                        let day = partes_fecha[0];
-
-                        if (month.length === 1) {
-                            month = `0${month}`;
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            return data;
+                        }),
+                    fetch(`http://localhost:8080/horarios/horario/${fila.HORARIO}`, {
+                        method: 'GET',
+                        headers: {
+                            'authorization': 'Bearer ' + localStorage.getItem('token')
                         }
-
-                        const nuevoServicioTarea = {
-                            "servicioTareaID": 0,
-                            "fecha": `${year}-${month}-${day}`,
-                            "hora": fila.HORA,
-                            "servicioID": servicio,
-                            "tareaID": tarea
-                        };
-
-                        console.log(nuevoServicioTarea)
-
-                        return fetch('http://localhost:8080/ata/ingresar', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            body: JSON.stringify(nuevoServicioTarea)
-                        })
-                            .then(response => {
-                                if (response.status === 200) {
-                                    cantOkEventos++;
-                                }
-                            })
                     })
                         .then(response => response.json())
                         .then(data => {
                             return data;
                         })
-                        .catch(error => console.log(error));
-                });
+                ])
+                    .then(([personal, horario]) => {
+                        delete personal.enabled;
+                        delete personal.authorities;
+                        delete personal.accountNonExpired;
+                        delete personal.credentialsNonExpired;
+                        delete personal.accountNonLocked;
 
-                Promise.all(fetchPromises)
-                    .then(() => {
-                        if (cantOkEventos === formExcelDataMemo.length) {
-                            Swal.fire('Carga exitosa');
-                        } else {
-                            Swal.fire('Error en la carga');
+                        const fecha = fila.FECHA.split('/');
+                        const year = fecha[2];
+                        const month = fecha[1] < 10 ? `0${fecha[1]}` : fecha[1];
+                        const day = fecha[0];
+                        const fechaFormateada = `${year}-${month}-${day}`;
+
+                        const nuevoServicio = {
+                            "servicioID": null,
+                            "nombre": fila.SERVICIO,
+                            "fecha": fechaFormateada,
+                            "personalID": personal,
+                            "horarioID": horario
+                        };
+
+                        return fetch('http://localhost:8080/servicio/serv', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'authorization': 'Bearer ' + localStorage.getItem('token')
+                            },
+                            body: JSON.stringify(nuevoServicio)
+                        });
+                    })
+                    .then(response => {
+                        if (response.status === 200) {
+                            cantOkMemo++;
                         }
-                        setCantOK(cantOkEventos);
-                    });
-            }
+                    })
+                    .catch(error => console.log(error));
+            });
+
+            Promise.all(fetchPromises)
+                .then(() => {
+                    if (cantOkMemo === formExcelDataMemo.length) {
+                        Swal.fire('Carga exitosa');
+                    } else {
+                        Swal.fire('Error en la carga');
+                    }
+                    setCantOK(cantOkMemo);
+                });
+        } else {
+            var cantOkEventos = 0;
+            setCantOK(0);
+            const fetchPromises = formExcelDataEventos.map(fila => {
+                let partes_fecha = fechaBusqueda.split('-');
+                let year = partes_fecha[0];
+                let month = partes_fecha[1];
+                let day = partes_fecha[2];
+
+                const servicioBusqueda = {
+                    "nombre": fila.PERSONAL,
+                    "fecha": `${year}-${month}-${day}`
+                };
+
+                return Promise.all([
+                    fetch(`http://localhost:8080/tareas/listar/${fila.EVENTO}`, {
+                        method: 'GET',
+                        headers: {
+                            'authorization': 'Bearer ' + localStorage.getItem('token')
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            return data;
+                        }),
+                    fetch(`http://localhost:8080/servicio/buscar`, {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            'authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify(servicioBusqueda)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.personalID.authorities) delete data.personalID.authorities;
+                            if (data.personalID.enabled) delete data.personalID.enabled;
+                            if (data.personalID.accountNonExpired) delete data.personalID.accountNonExpired;
+                            if (data.personalID.credentialsNonExpired) delete data.personalID.credentialsNonExpired;
+                            if (data.personalID.accountNonLocked) delete data.personalID.accountNonLocked;
+                            return data;
+                        })
+                ]).then(([tarea, servicio]) => {
+
+                    let partes_fecha = fila.FECHA.split('/');
+                    let year = partes_fecha[2];
+                    let month = partes_fecha[1];
+                    let day = partes_fecha[0];
+
+                    if (month.length === 1) {
+                        month = `0${month}`;
+                    }
+
+                    const nuevoServicioTarea = {
+                        "servicioTareaID": 0,
+                        "fecha": `${year}-${month}-${day}`,
+                        "hora": fila.HORA,
+                        "servicioID": servicio,
+                        "tareaID": tarea
+                    };
+
+                    return fetch('http://localhost:8080/ata/ingresar', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify(nuevoServicioTarea)
+                    })
+                        .then(response => {
+                            cantOkEventos++;
+                            return response;
+                        })
+                        .catch(error => console.log(error));
+                })
+                    .then(response => {
+                        if (response.status === 200) {
+                            cantOkEventos++;
+                        }
+                    })
+                    .then(data => {
+                        return data;
+                    })
+                    .catch(error => console.log(error));
+            });
+
+            Promise.all(fetchPromises)
+                .then(() => {
+                    if (cantOkEventos === (formExcelDataMemo.length)*2) {
+                        Swal.fire('Carga exitosa');
+                    } else {
+                        Swal.fire('Error en la carga');
+                    }
+                    setCantOK(cantOkEventos);
+                })
+                .catch(error => console.log(error));
         }
     };
 

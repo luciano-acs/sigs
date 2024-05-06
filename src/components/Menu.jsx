@@ -23,7 +23,7 @@ const Menu = () => {
                 <li className={'py-2 pl-2'} >
                     {loginOK ?
                         (<NavLink to={"/dashboard"} className={({ isActive }) =>
-                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
+                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                             <FiPieChart className="group-hover:text-[#1474E4] text-3xl" />
                             <span className={'group-hover:text-[#1474E4]'}>Dashboard</span>
                         </NavLink>)
@@ -37,7 +37,7 @@ const Menu = () => {
                 <li className={`py-2 pl-2`}>
                     {loginOK ?
                         <NavLink to="/seguimiento" className={({ isActive }) =>
-                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
+                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                             <FiMonitor className="group-hover:text-[#1474E4] text-3xl" />
                             <span className={`group-hover:text-[#1474E4]`}>Seguimiento</span>
                         </NavLink>
@@ -51,7 +51,7 @@ const Menu = () => {
                 <li className={`pt-2 pl-2`}>
                     {loginOK ?
                         <NavLink to="/personal" className={({ isActive }) =>
-                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleClickSubmenu}>
+                            `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleClickSubmenu}>
                             <GrUserPolice className="group-hover:text-[#1474E4] text-3xl" />
                             <span className={`group-hover:text-[#1474E4]`}>Personal</span>
                         </NavLink>
@@ -66,7 +66,7 @@ const Menu = () => {
                 <li className={`pt-4 pl-2`}>
                     {loginOK ?
                         <NavLink to="/informe" className={({ isActive }) =>
-                        `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
+                        `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                         <RiBillLine className="group-hover:text-[#1474E4] text-3xl" />
                         <span className={`group-hover:text-[#1474E4]`}>Informes</span>
                     </NavLink>
