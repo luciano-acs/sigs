@@ -26,7 +26,7 @@ const Nav = (props) => {
     return (
         <nav className="bg-[#0A3E79] fixed top-0 w-full h-20 flex justify-between transition-all z-50">
             <div className="w-2/3 flex justify-start items-center ml-16">
-                <NavLink to="/" onClick={handleShowOffSubMenu}><img src="/src/assets/logoBlanco.png" className="h-16 w-auto py-2 object-cover" alt="" /></NavLink>
+                <NavLink to="/" onClick={handleShowOffSubMenu}><img src="/public/logoBlanco.png" className="h-16 w-auto py-2 object-cover" alt="" /></NavLink>
             </div>
             <div className="w-1/3 flex justify-end items-center mr-16">
                 <ul className="flex flex-row items-center">
