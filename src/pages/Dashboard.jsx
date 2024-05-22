@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useContext } from 'react';
+import { MenuContext } from '../context/MenuContext';
 
 const Dashboard = () => {
 
@@ -18,21 +20,24 @@ const Dashboard = () => {
     const [eventosSeleccionados, setEventosSeleccionados] = useState(new Set());
     const [loading, setLoading] = useState(false);
 
+    const { showMenu } = useContext(MenuContext);
+
     const handleExportPDF = () => {
         setLoading(true);
 
         const input = document.getElementById('componente-a-exportar');
 
         html2canvas(input, {
-            scale: 2
+            scale: 4
         })
             .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF({
                     orientation: 'l',
                     unit: 'mm',
-                    format: [410, 200]
+                    format: [420, 200]
                 });
+
                 pdf.addImage(imgData, 'PNG', 10, 10, 400, 190);
                 const date = new Date();
                 const day = date.getDate().toString().padStart(2, '0');
@@ -42,7 +47,8 @@ const Dashboard = () => {
                 const minute = date.getMinutes().toString().padStart(2, '0');
                 const second = date.getSeconds().toString().padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-                pdf.text(`REPORTE DE EVENTOS - ${formattedDate}`, 140, 10, { align: 'right'});
+
+                pdf.text(`REPORTE DE EVENTOS - ${formattedDate}`, 140, 10, { align: 'right' });
                 pdf.save('componente.pdf');
                 setLoading(false);
             })
@@ -195,7 +201,7 @@ const Dashboard = () => {
     }, [evento, listadoDistritos, listadoEventos])
 
     return (
-        <div className="fixed top-20 left-52 w-calc h-calc" >
+        <div className={`${showMenu ? 'left-52 w-calc' : 'left-24 w-calc100'} fixed top-20 h-calc ease-in-out duration-150`} >
             <div className="w-full h-full flex flex-row flex-wrap justify-center items-center pt-2" id="componente-a-exportar">
                 <div className="w-2/3 h-2/3 flex justify-center items-center pl-8 pr-3 py-2" >
                     <div className='w-full h-full bg-[#0A3E79] shadow-lg shadow-black rounded-md'>
@@ -349,7 +355,7 @@ const Dashboard = () => {
                 <div className="w-1/3 h-2/3 flex justify-center items-center pr-8 pl-3 py-2">
                     <div className='w-full h-full bg-[#0A3E79] shadow-lg shadow-black rounded-md'>
                         <select className="bg-white w-72 rounded-lg py-1 px-2 border-[#1474E4]/50 border-2 focus:outline-[#1474E4] h-8 mt-2 ml-4" type="number" name="distritoID" id="distrito" onChange={(e) => setEvento(e.target.value)}>
-                            <option hidden value=""  className='p-0'>Seleccione un evento</option>
+                            <option hidden value="" className='p-0'>Seleccione un evento</option>
                             <option value="V10">LOGIN</option>
                             <option value="V04">ARRIBO</option>
                             <option value="_PI">ARRIBO INVALIDO</option>
@@ -431,8 +437,15 @@ const Dashboard = () => {
                                     className={`hover:bg-[#1474EA] hover:text-white transition-all min-w-150px h-full rounded-md flex justify-center items-center flex-col shadow-md shadow-black ${estaSeleccionado ? 'bg-[#1474EA] text-white shadow-sm shadow-gray-100' : 'bg-[#D9D9D9]'}`}
                                     onClick={() => handleClickDistrito(distrito.distrito)}
                                 >
-                                    <h1 className='text-center text-2xl font-bold px-2 uppercase'>{distrito.distrito}</h1>
-                                    <div className='flex justify-center items-center text-xl font-semibold'>{distrito.cantidadPersonal}</div>
+                                    <motion.h1 className='text-center text-2xl font-bold px-2 uppercase'
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}>{distrito.distrito}</motion.h1>
+                                    <motion.div
+                                        className='flex justify-center items-center text-xl font-semibold'
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.5 }}>{distrito.cantidadPersonal}</motion.div>
                                 </div>
                             );
                         })}

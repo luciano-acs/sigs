@@ -2,7 +2,7 @@ import { useEffect, useContext } from "react";
 import { MenuContext } from "../context/MenuContext";
 const Principal = () => {
 
-    const { changeUser } = useContext(MenuContext);
+    const { showMenu, changeUser } = useContext(MenuContext);
 
     useEffect(() => {
         fetch('http://localhost:8080/status', {
@@ -12,7 +12,7 @@ const Principal = () => {
             }
         })
             .then(response => {
-                if (!response.ok || localStorage.getItem('token') === null){
+                if (!response.ok || localStorage.getItem('token') === null) {
                     changeUser();
                     throw new Error("Servidor no disponible, intente más tarde");
                 }
@@ -22,27 +22,23 @@ const Principal = () => {
                 console.log(error);
                 changeUser();
             }, []);
-        });
+    });
 
-
-
-
-        return (
-            <div className="fixed top-20 left-52 w-calc h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex flex-col items-center">
-                <img src="src/assets/casa.jpg" className="object-cover object-center w-full h-full absolute z-10" />
-                <div className="w-full h-full bg-black/60 absolute z-20"></div>
-                <h1 className="py-12 text-white text-6xl z-40">
-                    SIGS
-                </h1>
-                <h2 className="py-8 text-center text-3xl text-white uppercase z-40">
-                    Sistema Integral de Gestión en Seguridad
-                </h2>
-                <p className="p-12 text-xl text-white text-center z-40">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae soluta obcaecati laudantium quod modi quasi mollitia distinctio nulla necessitatibus. Ab sed vero consectetur? Iste, mollitia. Dicta ea neque quo rem.
-                    Nostrum voluptatem veniam nam adipisci doloribus animi alias dicta delectus sit consequatur. Alias laudantium, sint aliquam animi, deleniti dolor voluptatem qui aspernatur eaque cupiditate fugiat quae. Fugit illo debitis veniam?
-                </p>
-            </div>
-        );
-    }
+    return (
+        <div className={`${showMenu ? 'w-calc left-52' : 'w-calc100 left-24'} fixed top-20 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex flex-col items-center transition-all`}>
+            <img src="src/assets/casa.jpg" className="object-cover object-center w-full h-full absolute z-10" />
+            <div className="w-full h-full bg-black/60 absolute z-20"></div>
+            <h1 className="py-12 text-white text-6xl z-40 font-semibold">
+                SGMP
+            </h1>
+            <h2 className="py-8 text-center text-3xl text-white uppercase z-40">
+                Sistema Integral de gestión y monitoreo de personal policial
+            </h2>
+            <p className="px-32 py-12 text-2xl text-white text-center z-40">
+                Nuestra aplicación web está diseñada para fortalecer la eficiencia operativa y el control administrativo dentro de las fuerzas policiales. Con un enfoque en la gestión de eventos y el personal, ofrecemos herramientas intuitivas para la carga, almacenamiento y análisis de datos críticos. Desde la supervisión de eventos hasta la gestión del personal, nuestra plataforma proporciona una solución integral para mejorar la eficacia y la toma de decisiones dentro de su institución policial
+            </p>
+        </div>
+    );
+}
 
 export default Principal;

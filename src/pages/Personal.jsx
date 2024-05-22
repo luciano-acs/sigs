@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { LuPencilLine } from "react-icons/lu";
 import { MdDeleteOutline, MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { TbReportAnalytics } from "react-icons/tb";
 import { FiSearch } from "react-icons/fi";
 import { Tooltip } from "react-tippy";
 import ModificacionPersonal from "./ModificacionPersonal";
+import Perfil from "./Perfil";
 import { MenuContext } from "../context/MenuContext";
 import Swal from "sweetalert2";
 
@@ -18,7 +20,7 @@ const Personal = () => {
     const [pages, setPages] = useState(1);
     const [busqueda, setBusqueda] = useState('');
 
-    const { changeUser } = useContext(MenuContext);
+    const { showMenu, changeUser , handlePerfilSeleccionado, perfilSeleccionado} = useContext(MenuContext);
 
     const openModalPersonal = (id) => {
         setPersonalSeleccionado(id);
@@ -151,7 +153,8 @@ const Personal = () => {
 
     return (
         <>
-            <div className="fixed top-20 left-52 pb-40 w-calc h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+            {perfilSeleccionado !== null ? (<Perfil perfilId={personalSeleccionado} />) :
+            (<div className={`${showMenu ? 'left-52 w-calc' : 'left-24 w-calc100'} fixed top-20 pb-40 w-calc h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full ease-in-out duration-150`}>
                 <div className="flex flex-row justify-between items-center h-9 my-4 p-3 w-full">
                     <h1 className='font-bold text-4xl pl-12 py-6 text-left text-black uppercase'>Listado</h1>
                     <div className="flex flex-row justify-center items-center">
@@ -194,11 +197,14 @@ const Personal = () => {
                                             <td className="border border-collapse">{personal.cargo}</td>
                                             <td className="border border-collapse">{personal.distritoID.nombre}</td>
                                             <td className="border border-collapse flex items-center justify-center gap-8 flex-row h-full">
-                                                <Tooltip className="bg-cyan-800 rounded-md px-2" title="Modificar">
-                                                    <LuPencilLine className="text-4xl bg-cyan-800 text-white rounded-md py-2 cursor-pointer" onClick={() => openModalPersonal(personal.personalID)} />
+                                                {/* <Tooltip className="bg-green-600 rounded-md px-1" title="Perfil">
+                                                    <TbReportAnalytics className="text-4xl bg-green-600 text-white rounded-md py-2 cursor-pointer" onClick={()=> handlePerfilSeleccionado(personal.personalID)}/>
+                                                </Tooltip> */}
+                                                <Tooltip className="bg-cyan-700 rounded-md px-1" title="Modificar">
+                                                    <LuPencilLine className="text-4xl bg-cyan-700 text-white rounded-md py-2 cursor-pointer" onClick={() => openModalPersonal(personal.personalID)} />
                                                 </Tooltip>
-                                                <Tooltip className="bg-red-800 rounded-md px-2" title="Eliminar">
-                                                    <MdDeleteOutline className="text-4xl bg-red-800 text-white rounded-md py-2 cursor-pointer" onClick={() => eliminarPersonal(personal.personalID)} />
+                                                <Tooltip className="bg-red-500 rounded-md px-1" title="Eliminar">
+                                                    <MdDeleteOutline className="text-4xl bg-red-500 text-white rounded-md py-2 cursor-pointer" onClick={() => eliminarPersonal(personal.personalID)} />
                                                 </Tooltip>
                                             </td>
                                         </tr>
@@ -215,7 +221,7 @@ const Personal = () => {
                         <MdKeyboardDoubleArrowRight className="text-xl cursor-pointer" onClick={ultimaHoja} />
                     </div>
                 </div>
-            </div>
+            </div>)}
         </>
     );
 };

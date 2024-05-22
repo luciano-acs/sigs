@@ -8,6 +8,7 @@ export default {
     extend: {
       width:{
         'calc': 'calc(100% - 208px)',
+        'calc100': 'calc(100% - 96px)',
         'calc1': 'calc(100% - 10px)',
       },
       height:{

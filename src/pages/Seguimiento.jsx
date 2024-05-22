@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
+import { useContext } from 'react';
+import { MenuContext } from '../context/MenuContext';
 
 const Seguimiento = () => {
 
@@ -13,6 +15,8 @@ const Seguimiento = () => {
 
     const headersMemo = ['SERVICIO', 'PERSONAL', 'FECHA', 'HORARIO']
     const headersEventos = ['EVENTO', 'PERSONAL', 'FECHA', 'HORA']
+
+    const { showMenu } = useContext(MenuContext);
 
     const handleFileEventosUpload = (e) => {
         const fileInput = e.target;
@@ -304,7 +308,7 @@ const Seguimiento = () => {
     };
 
     return (
-        <div className="fixed top-20 left-52 w-calc h-calc overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+        <div className={`${showMenu ? 'left-52 w-calc' : 'left-24 w-calc100'} fixed top-20 h-calc overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full ease-in-out duration-150`}>
             <h1 className='font-bold text-4xl pl-12 py-6 text-left text-black uppercase'>Seguimiento</h1>
             <div className='flex justify-between items-center'>
                 <div className='flex flex-col justify-between items-start'>

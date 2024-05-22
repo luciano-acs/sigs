@@ -7,11 +7,12 @@ const Footer = () => {
             <div className="w-1/3 flex justify-start items-center ml-16">
                 <p className="text-white">© 2023 Ministerio de Seguridad</p>
             </div>
+            {/* </div>
             <div className="w-2/3 flex justify-end items-center mr-16">
                 <FaYoutube className="text-white text-2xl mr-3" />
                 <FaFacebook className="text-white text-2xl mr-3" />
                 <FaInstagram className="text-white text-2xl mr-3" />                
-            </div>
+            </div> */}
 
 
         </footer>

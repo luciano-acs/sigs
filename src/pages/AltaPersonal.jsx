@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import FormUsuario from '../components/FormUsuario'
 import Swal from 'sweetalert2'
+import { MenuContext } from '../context/MenuContext'
 
 const AltaPersonal = () => {
 
@@ -28,6 +29,8 @@ const AltaPersonal = () => {
     "username": "",
     "password": ""
   })
+
+  const { showMenu } = useContext(MenuContext)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -75,7 +78,7 @@ const AltaPersonal = () => {
 
   return (
     <>
-      <div className="fixed top-20 left-52 w-calc h-full">
+      <div className={`${showMenu ? 'left-52 w-calc' : 'left-24 w-calc100'} fixed top-20 h-full ease-in-out duration-150`}>
         <h1 className='font-bold text-4xl pl-12 py-6 text-left text-black uppercase'>Alta de Personal</h1>
         <div className='flex items-start justify-center flex-col mt-6 ml-12 w-3/5'>
           <FormUsuario key={formKey} handleFormChange={handleFormChange} />

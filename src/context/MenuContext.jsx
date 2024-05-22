@@ -7,9 +7,19 @@ export const MenuContext = createContext();
 export const MenuProvider = ({ children }) => {
 
     const [showSubMenu, setShowSubMenu] = useState(false);
+    const [perfilSeleccionado, setPerfilSeleccionado] = useState(null);
     const [loginOK, setLoginOK] = useState(localStorage.getItem('loginOK') ? true : false);
     const [user, setUser] = useState(localStorage.getItem('user') ? localStorage.getItem('user') : '');
+    const [showMenu, setShowMenu] = useState(false);
     const navigate = useNavigate();
+
+    const handleShowMenu = () => {
+        setShowMenu(!showMenu)
+    }
+
+    const handlePerfilSeleccionado = (tipo) => {
+        setPerfilSeleccionado(tipo)
+    }
 
     const handleShowOffSubMenu = () => {
         setShowSubMenu(false);
@@ -17,6 +27,7 @@ export const MenuProvider = ({ children }) => {
 
     const handleClickSubmenu = (link) => {
         setShowSubMenu(!showSubMenu)
+        setPerfilSeleccionado(null)
     }
 
     const handleLoginOK = () => {
@@ -35,7 +46,7 @@ export const MenuProvider = ({ children }) => {
     }
 
     return (
-        <MenuContext.Provider value={{ showSubMenu, loginOK, user, setUser, handleLoginOK, handleShowOffSubMenu, handleClickSubmenu, changeUser }}>
+        <MenuContext.Provider value={{ showMenu, showSubMenu, loginOK, user, setUser, handleShowMenu,handleLoginOK, handleShowOffSubMenu, handleClickSubmenu, changeUser, perfilSeleccionado, handlePerfilSeleccionado }}>
             {children}
         </MenuContext.Provider>
     )
