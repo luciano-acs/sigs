@@ -9,7 +9,7 @@ const FormUsuario = ({ personalId, handleFormChange, esModificacion }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (personalId) {
-            fetch(`http://localhost:8080/personal/listar/${personalId}`, {
+            fetch(`https://srv555183.hstgr.cloud:3002/personal/listar/${personalId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

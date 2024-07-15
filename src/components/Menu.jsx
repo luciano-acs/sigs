@@ -22,7 +22,7 @@ const Menu = () => {
                             </li>
                             <li className={'py-2 pl-2'} >
                                 {loginOK ?
-                                    (<NavLink to={"/dashboard"} className={({ isActive }) =>
+                                    (<NavLink to={"/vigicontrol/dashboard"} className={({ isActive }) =>
                                         `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                                         <FiPieChart className="group-hover:text-[#1474E4] text-3xl" />
                                         <span className={'group-hover:text-[#1474E4]'}>Dashboard</span>
@@ -36,7 +36,7 @@ const Menu = () => {
                             </li>
                             <li className={`py-2 pl-2`}>
                                 {loginOK ?
-                                    <NavLink to="/seguimiento" className={({ isActive }) =>
+                                    <NavLink to="/vigicontrol/seguimiento" className={({ isActive }) =>
                                         `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                                         <FiMonitor className="group-hover:text-[#1474E4] text-3xl" />
                                         <span className={`group-hover:text-[#1474E4]`}>Seguimiento</span>
@@ -50,7 +50,7 @@ const Menu = () => {
                             </li>
                             <li className={`pt-2 pl-2`}>
                                 {loginOK ?
-                                    <NavLink to="/personal" className={({ isActive }) =>
+                                    <NavLink to="/vigicontrol/personal" className={({ isActive }) =>
                                         `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleClickSubmenu}>
                                         <GrUserPolice className="group-hover:text-[#1474E4] text-3xl" />
                                         <span className={`group-hover:text-[#1474E4]`}>Personal</span>
@@ -74,7 +74,7 @@ const Menu = () => {
                             </li>
                             <li className={'py-2 pl-2'} >
                                 {loginOK ?
-                                    (<NavLink to={"/dashboard"} className={({ isActive }) =>
+                                    (<NavLink to={"/vigicontrol/dashboard"} className={({ isActive }) =>
                                         `flex flex-row justify-between items-center rounded-l-lg px-2 py-2 hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                                         <FiPieChart className="group-hover:text-[#1474E4] text-3xl" />
                                     </NavLink>)
@@ -86,7 +86,7 @@ const Menu = () => {
                             </li>
                             <li className={`py-2 pl-2`}>
                                 {loginOK ?
-                                    <NavLink to="/seguimiento" className={({ isActive }) =>
+                                    <NavLink to="/vigicontrol/seguimiento" className={({ isActive }) =>
                                         `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleShowOffSubMenu}>
                                         <FiMonitor className="group-hover:text-[#1474E4] text-3xl" />
                                     </NavLink>
@@ -98,7 +98,7 @@ const Menu = () => {
                             </li>
                             <li className={`pt-2 pl-2`}>
                                 {loginOK ?
-                                    <NavLink to="/personal" className={({ isActive }) =>
+                                    <NavLink to="/vigicontrol/personal" className={({ isActive }) =>
                                         `flex flex-row justify-between items-center rounded-l-lg px-2 py-2  hover:bg-white group transition ease-in-out duration-200 ${isActive ? 'bg-white text-[#1474E4]' : ''}`} onClick={handleClickSubmenu}>
                                         <GrUserPolice className="group-hover:text-[#1474E4] text-3xl" />
                                     </NavLink>

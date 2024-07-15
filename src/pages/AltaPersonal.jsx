@@ -51,7 +51,7 @@ const AltaPersonal = () => {
 
     console.log(nuevoPersonal)
 
-    fetch('http://localhost:8080/auth/register', {
+    fetch('https://srv555183.hstgr.cloud:3002/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

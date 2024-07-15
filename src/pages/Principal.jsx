@@ -5,7 +5,7 @@ const Principal = () => {
     const { showMenu, changeUser } = useContext(MenuContext);
 
     useEffect(() => {
-        fetch('http://localhost:8080/status', {
+        fetch('https://srv555183.hstgr.cloud:3002/status', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ const Principal = () => {
 
     return (
         <div className={`${showMenu ? 'w-calc left-52' : 'w-calc100 left-24'} fixed top-20 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#1474E4]/30 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex flex-col items-center transition-all`}>
-            <img src="public/casa.jpg" className="object-cover object-center w-full h-full absolute z-10" />
+            <img src="/vigicontrol/casa.jpg" className="object-cover object-center w-full h-full absolute z-10" />
             <div className="w-full h-full bg-black/60 absolute z-20"></div>
             <h1 className="py-12 text-white text-6xl z-40 font-semibold">
                 SGMP

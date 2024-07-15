@@ -40,7 +40,7 @@ export const MenuProvider = ({ children }) => {
             setUser('')
             handleShowOffSubMenu()
             handleLoginOK()
-            navigate('/')
+            navigate('/vigicontrol/')
             localStorage.clear();
         }
     }

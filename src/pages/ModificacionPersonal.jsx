@@ -15,7 +15,7 @@ const ModificacionPersonal = (props) => {
 
   const handleSubmit = () => {
     const token = localStorage.getItem('token');
-    fetch(`http://localhost:8080/personal/listar/${personalId}`, {
+    fetch(`https://srv555183.hstgr.cloud:3002/personal/listar/${personalId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const ModificacionPersonal = (props) => {
         delete actualizacion.credentialsNonExpired;
         delete actualizacion.accountNonLocked;
 
-        fetch(`http://localhost:8080/personal/actualizar/${personalId}`, {
+        fetch(`https://srv555183.hstgr.cloud:3002/personal/actualizar/${personalId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

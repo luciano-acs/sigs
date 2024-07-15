@@ -141,7 +141,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = () => {
             Promise.all([
-                fetch(`http://localhost:8080/personal/distritos?nombreDistritos=`, {
+                fetch(`https://srv555183.hstgr.cloud:3002/personal/distritos?nombreDistritos=`, {
                     method: 'GET',
                     headers: {
                         'authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -151,7 +151,7 @@ const Dashboard = () => {
                     .then(data => {
                         return data;
                     }),
-                fetch(`http://localhost:8080/personal/eventos?nombreDistritos=${listadoDistritos}&nombreEventos=${listadoEventos}`, {
+                fetch(`https://srv555183.hstgr.cloud:3002/personal/eventos?nombreDistritos=${listadoDistritos}&nombreEventos=${listadoEventos}`, {
                     method: 'GET',
                     headers: {
                         'authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -161,7 +161,7 @@ const Dashboard = () => {
                     .then(data => {
                         return data;
                     }),
-                fetch(`http://localhost:8080/personal/eventos?nombreEventos=${evento}&nombreDistritos=${listadoDistritos}`, {
+                fetch(`https://srv555183.hstgr.cloud:3002/personal/eventos?nombreEventos=${evento}&nombreDistritos=${listadoDistritos}`, {
                     method: 'GET',
                     headers: {
                         'authorization': 'Bearer ' + localStorage.getItem('token'),

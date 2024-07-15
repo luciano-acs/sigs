@@ -140,7 +140,7 @@ const Seguimiento = () => {
             setCantOK(0);
             const fetchPromises = formExcelDataMemo.map(fila => {
                 return Promise.all([
-                    fetch(`http://localhost:8080/personal/listar/${fila.PERSONAL}`, {
+                    fetch(`https://srv555183.hstgr.cloud:3002/personal/listar/${fila.PERSONAL}`, {
                         method: 'GET',
                         headers: {
                             'authorization': 'Bearer ' + localStorage.getItem('token')
@@ -150,7 +150,7 @@ const Seguimiento = () => {
                         .then(data => {
                             return data;
                         }),
-                    fetch(`http://localhost:8080/horarios/horario/${fila.HORARIO}`, {
+                    fetch(`https://srv555183.hstgr.cloud:3002/horarios/horario/${fila.HORARIO}`, {
                         method: 'GET',
                         headers: {
                             'authorization': 'Bearer ' + localStorage.getItem('token')
@@ -182,7 +182,7 @@ const Seguimiento = () => {
                             "horarioID": horario
                         };
 
-                        return fetch('http://localhost:8080/servicio/serv', {
+                        return fetch('https://srv555183.hstgr.cloud:3002/servicio/serv', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ const Seguimiento = () => {
                 };
 
                 return Promise.all([
-                    fetch(`http://localhost:8080/tareas/listar/${fila.EVENTO}`, {
+                    fetch(`https://srv555183.hstgr.cloud:3002/tareas/listar/${fila.EVENTO}`, {
                         method: 'GET',
                         headers: {
                             'authorization': 'Bearer ' + localStorage.getItem('token')
@@ -233,7 +233,7 @@ const Seguimiento = () => {
                         .then(data => {
                             return data;
                         }),
-                    fetch(`http://localhost:8080/servicio/buscar`, {
+                    fetch(`https://srv555183.hstgr.cloud:3002/servicio/buscar`, {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json',
@@ -269,7 +269,7 @@ const Seguimiento = () => {
                         "tareaID": tarea
                     };
 
-                    return fetch('http://localhost:8080/ata/ingresar', {
+                    return fetch('https://srv555183.hstgr.cloud:3002/ata/ingresar', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

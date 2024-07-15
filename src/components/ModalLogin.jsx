@@ -16,7 +16,7 @@ const ModalLogin = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoadingUser(true);
-        fetch('http://localhost:8080/auth/login', {
+        fetch('https://srv555183.hstgr.cloud:3002/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ const ModalLogin = (props) => {
             })
             .then(data => {
                 localStorage.setItem('token', data.token);
-                fetch(`http://localhost:8080/personal/user/${username}`, {
+                fetch(`https://srv555183.hstgr.cloud:3002/personal/user/${username}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${data.token}`,

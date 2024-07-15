@@ -41,13 +41,13 @@ function App() {
         <Nav showOnModalLogin={showOnModalLogin} showOnModalRegister={showOnModalRegister}/>
         <Menu />
         <Routes>
-          <Route path="/" element={<Principal />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/informe" element={<Informe />} />
-          <Route path="/seguimiento" element={<Seguimiento />} />
-          <Route path="/personal" element={<Personal />} />
-          <Route path="/personal/:altas" element={<AltaPersonal />} />
-          <Route path="/update" element={<ModificacionPersonal />} />
+          <Route path="/vigicontrol/" element={<Principal />} />
+          <Route path="/vigicontrol/dashboard" element={<Dashboard />} />
+          <Route path="/vigicontrol/informe" element={<Informe />} />
+          <Route path="/vigicontrol/seguimiento" element={<Seguimiento />} />
+          <Route path="/vigicontrol/personal" element={<Personal />} />
+          <Route path="/vigicontrol/personal/:altas" element={<AltaPersonal />} />
+          <Route path="/vigicontrol/update" element={<ModificacionPersonal />} />
         </Routes>
         <Footer />
         {modalLogin && <ModalLogin showOffModalLogin={showOffModalLogin} />}

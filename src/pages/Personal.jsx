@@ -58,7 +58,7 @@ const Personal = () => {
     useEffect(() => {
         setLoading(true);
         setActualizacion()
-        fetch(`http://localhost:8080/personal/listar/page?page=${hoja}&size=20&sortBy=apeYnom&sortOrder=ASC&id=${busqueda}`, {
+        fetch(`https://srv555183.hstgr.cloud:3002/personal/listar/page?page=${hoja}&size=20&sortBy=apeYnom&sortOrder=ASC&id=${busqueda}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -105,7 +105,7 @@ const Personal = () => {
             confirmButtonText: "Si, eliminar!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:8080/personal/listar/${id}`, {
+                fetch(`https://srv555183.hstgr.cloud:3002/personal/listar/${id}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -124,7 +124,7 @@ const Personal = () => {
                         delete actualizacion.credentialsNonExpired;
                         delete actualizacion.accountNonLocked;
 
-                        fetch(`http://localhost:8080/personal/eliminar/${id}`, {
+                        fetch(`https://srv555183.hstgr.cloud:3002/personal/eliminar/${id}`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',

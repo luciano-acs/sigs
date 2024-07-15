@@ -9,7 +9,7 @@ const Perfil = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        fetch(`http://localhost:8080/personal/listar/${perfilSeleccionado}`, {
+        fetch(`https://srv555183.hstgr.cloud:3002/personal/listar/${perfilSeleccionado}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
